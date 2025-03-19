@@ -1,10 +1,12 @@
 import Link from "next/link"
-import { Bell, Settings, User } from "lucide-react"
-
+import { Bell, Settings } from "lucide-react"
 import { Button } from "@/components/ui/button"
-import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "@/components/ui/dropdown-menu"
+import { UserNav } from "@/components/user-nav"
+import { getUser } from "@/lib/auth"
 
-export function DashboardHeader() {
+export async function DashboardHeader() {
+  const user = await getUser()
+
   return (
     <header className="border-b bg-background">
       <div className="container flex h-16 items-center px-4 md:px-6">
@@ -14,25 +16,13 @@ export function DashboardHeader() {
         <nav className="ml-auto flex gap-4 sm:gap-6">
           <Button variant="ghost" size="icon">
             <Bell className="h-5 w-5" />
-            <span className="sr-only">Notifications</span>
+            <span className="sr-only">Notificações</span>
           </Button>
           <Button variant="ghost" size="icon">
             <Settings className="h-5 w-5" />
-            <span className="sr-only">Settings</span>
+            <span className="sr-only">Configurações</span>
           </Button>
-          <DropdownMenu>
-            <DropdownMenuTrigger asChild>
-              <Button variant="ghost" size="icon" className="rounded-full">
-                <User className="h-5 w-5" />
-                <span className="sr-only">Profile</span>
-              </Button>
-            </DropdownMenuTrigger>
-            <DropdownMenuContent align="end">
-              <DropdownMenuItem>Profile</DropdownMenuItem>
-              <DropdownMenuItem>Settings</DropdownMenuItem>
-              <DropdownMenuItem>Logout</DropdownMenuItem>
-            </DropdownMenuContent>
-          </DropdownMenu>
+          {user && <UserNav user={user} />}
         </nav>
       </div>
     </header>
